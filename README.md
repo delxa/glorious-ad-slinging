@@ -1,5 +1,7 @@
 # glorious-ad-slinging
 
+![Testing Workflow](https://github.com/delxa/glorious-ad-slinging/actions/workflows/test.yml/badge.svg)
+
 ## Intro
 
 I like to map out some of my thinking prior to cutting code and then follow up with specific comments around what has been implemented.
