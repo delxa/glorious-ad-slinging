@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/restrict-plus-operands */
-/* Will remove the above later once I've resolved this. */
 import inventory from '../data/inventory'
 
 export const DISCOUNT_NTH_ITEM = 'nthItem'
@@ -24,12 +22,25 @@ interface SkuPriceIndex {
   [key: string]: number
 }
 
+interface CartTotals {
+  subtotal: number
+  discountTotal: number
+  total: number
+}
+
+interface CheckoutState {
+  pricingRules: PricingRule[]
+  inventory: InventoryItem[]
+  skuPrices: SkuPriceIndex
+  items: string[]
+  totals: CartTotals
+}
+
 /**
  * Checkout offers behaviors consistent with the way many checkouts behave, as well as some discounting logic
  */
 export default class Checkout {
-  // Not yet sure of the shape of the state type so going to leave as `any` for now.
-  private state: any
+  private state: CheckoutState
 
   /**
    * Returns a new instance of the checkout with the given pricing rules
@@ -51,6 +62,10 @@ export default class Checkout {
   }
 
   /**
+   * PUBLIC MEMBERS
+   */
+
+  /**
    * Add a listing type to cart, based on the given SKU. This will cause a recalculation of discount/total states.
    * @param {string} sku - The SKU of the Ad Type to add to the cart
    * @returns {Checkout} - Returns this to allow chaining of add items
@@ -66,26 +81,42 @@ export default class Checkout {
       items: [...items, sku]
     })
 
-    // Trigger retotal event
+    // Trigger recalculation
     this.calculateTotals()
     return this
   }
 
   /**
    * Returns the total of the cart including any applied discounts.
-   * @returns {number} The total amount owing, given the cart contents and applied discount
+   * @param {boolean} [detailed=false] - Whether to provide additional total information
+   * @returns {number | CartTotals} The total amount owing, given the cart contents and applied discount or CartTotals with subtotal, discountTotal and total
    * @public
    */
-  total (): number {
-    return this.state.totals.total
+  total (detailed: boolean = false): number | CartTotals {
+    const { totals } = this.state
+    return detailed
+      ? totals
+      : totals.total
   }
+
+  /**
+   * Returns a list of items available for purchase
+   * @returns {InventoryItem[]} - Items available for purchase via the checkout
+   */
+  getProducts (): InventoryItem[] {
+    return this.state.inventory
+  }
+
+  /**
+   * PRIVATE MEMBERS
+   */
 
   /**
    * Set the state of the checkout component to the one given
    * @param {any} nextState - The state that will replace this one.
    * @private
    */
-  private setState (nextState: any): void {
+  private setState (nextState: CheckoutState): void {
     this.state = nextState
   }
 
@@ -98,11 +129,11 @@ export default class Checkout {
 
     // Derrive new totalState
     const subtotal = this.calculateSubtotals()
-    const discount = this.calculateDiscounts()
-    const total = subtotal - discount
+    const discountTotal = this.calculateDiscounts()
+    const total = subtotal - discountTotal
     const totals = {
       subtotal,
-      discount,
+      discountTotal,
       total
     }
 
@@ -123,7 +154,8 @@ export default class Checkout {
 
     // total up items using a reduce
     return items.reduce((a: number, c: string) => {
-      return a + skuPrices[c]
+      const skuPrice: number = skuPrices[c]
+      return a + skuPrice
     }, 0)
   }
 
@@ -189,7 +221,11 @@ export default class Checkout {
   }
 
   /**
-   * Pure function to reduce a list of inventory to a map of prices indexed by sku
+   * UTILITY
+   */
+
+  /**
+   * Stateless function to reduce a list of inventory to a map of prices indexed by sku
    * @param {InventoryItem[]} inventory - The list of inventory items to index
    * @returns {SkuPriceIndex} - The index of prices
    */
