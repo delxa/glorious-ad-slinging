@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "lint": "ts-standard src/",
-    "test": "jest",
+    "test": "ts-standard src/ && jest",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },

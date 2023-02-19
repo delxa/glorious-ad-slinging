@@ -8,7 +8,17 @@ I like to map out some of my thinking prior to cutting code and then follow up w
 
 ## Quickstart
 
-TBC: Details of getting the solution up and running, having a play and running tests.
+This solution has been built in Javascript targeting Node.js v18.x.
+
+Clone this repo and install dependencies:
+
+```bash
+git clone git@github.com:delxa/glorious-ad-slinging.git
+npm install
+```
+
+Run linting and tests: `npm run test`
+Run demo UI: `npm run dev`
 
 ## Pre-implementation and design notes
 
