@@ -4,7 +4,7 @@ import { SKU_CLASSIC, SKU_STANDOUT, SKU_PREMIUM } from '../data/inventory'
 
 // Integration tests for TDD
 test('Integration: Scenario 1 - Default', () => {
-  const co = new Checkout([])
+  const co = new Checkout()
   co
     .add(SKU_CLASSIC)
     .add(SKU_STANDOUT)
