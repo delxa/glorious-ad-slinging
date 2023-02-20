@@ -5,7 +5,7 @@ import {
 /**
  * DISCOUNT HANDLERS
  * These are intentionally stateless so as to be independent from the class and easily testable.
- * I may move these before I'm done.
+ * Behavior wise, these functions calculate the total amount of discount, not the total after discounting.
  */
 
 /**
