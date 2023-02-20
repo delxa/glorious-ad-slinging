@@ -1,6 +1,6 @@
 # glorious-ad-slinging
 
-![Testing Workflow](https://github.com/delxa/glorious-ad-slinging/actions/workflows/test.yml/badge.svg)
+[![Tests](https://github.com/delxa/glorious-ad-slinging/actions/workflows/test.yml/badge.svg)](https://github.com/delxa/glorious-ad-slinging/actions/workflows/test.yml)
 
 ## Intro
 
