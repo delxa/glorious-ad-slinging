@@ -1,5 +1,10 @@
-import { SKU_CLASSIC, SKU_STANDOUT, SKU_PREMIUM } from './inventory'
-import { DISCOUNT_NTH_ITEM, DISCOUNT_ITEM_DISCOUNT } from '../checkout/Checkout'
+import {
+  DISCOUNT_NTH_ITEM,
+  DISCOUNT_ITEM_DISCOUNT,
+  SKU_CLASSIC,
+  SKU_STANDOUT,
+  SKU_PREMIUM
+} from '../checkout/constants'
 
 const pricingRules = {
   SecondBite: [

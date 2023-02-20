@@ -1,40 +1,13 @@
 import inventory from '../data/inventory'
-
-export const DISCOUNT_NTH_ITEM = 'nthItem'
-export const DISCOUNT_ITEM_DISCOUNT = 'itemDiscount'
-
-interface PricingRule {
-  type: string
-  sku: string
-  price: number
-  qty?: number
-}
-
-interface InventoryItem {
-  sku: string
-  price: number
-  currency: string
-  name: string
-  description: string
-}
-
-interface SkuPriceIndex {
-  [key: string]: number
-}
-
-interface CartTotals {
-  subtotal: number
-  discountTotal: number
-  total: number
-}
-
-interface CheckoutState {
-  pricingRules: PricingRule[]
-  inventory: InventoryItem[]
-  skuPrices: SkuPriceIndex
-  items: string[]
-  totals: CartTotals
-}
+import {
+  PricingRule,
+  InventoryItem,
+  SkuPriceIndex,
+  CartTotals,
+  CheckoutState
+} from './models'
+import { handleNthItemDiscount, handleItemDiscount } from './discounts'
+import { DISCOUNT_NTH_ITEM, DISCOUNT_ITEM_DISCOUNT } from './constants'
 
 /**
  * Checkout offers behaviors consistent with the way many checkouts behave, as well as some discounting logic
@@ -171,53 +144,14 @@ export default class Checkout {
     return pricingRules.reduce((a: number, c: PricingRule) => {
       switch (c.type) {
         case DISCOUNT_NTH_ITEM:
-          return a + this.handleNthItemDiscount(c, items, skuPrices)
+          return a + handleNthItemDiscount(c, items, skuPrices)
         case DISCOUNT_ITEM_DISCOUNT:
-          return a + this.handleItemDiscount(c, items, skuPrices)
+          return a + handleItemDiscount(c, items, skuPrices)
         default:
           // Undefined discount type. Probably should throw an exception.
           return a
       }
     }, 0)
-  }
-
-  /**
-   * DISCOUNT HANDLERS
-   * These are intentionally stateless so as to be independent from the class and easily testable.
-   * I may move these before I'm done.
-   */
-
-  /**
-   * Evaluate cart contents against the conditions for nthItemDiscounts and apply affects as required
-   * @param {PricingRule} ruleParams - The parameters of the pricing rule to evaluate
-   * @param {string[]} cartItems - The contents of the cart
-   * @param {SkuPriceIndex} skuPrices - The unit costs as a map of prices to SKU
-   * @returns The total value of discounts based on the conditions and effects
-   * @private
-   */
-  private handleNthItemDiscount (ruleParams: PricingRule, cartItems: string[], skuPrices: SkuPriceIndex): number {
-    const { sku, price, qty } = ruleParams
-    if (qty === undefined) return 0
-    const fullPrice = skuPrices[sku]
-    const applicableItems = cartItems.filter(item => item === sku)
-    const numberTimesApplied = Math.floor(applicableItems.length / qty)
-    return numberTimesApplied * (fullPrice - price)
-  }
-
-  /**
-   * Evaluate cart contents against the conditions for itemDiscounts and apply affects as required
-   * @param {PricingRule} ruleParams - The parameters of the pricing rule to evaluate
-   * @param {string[]} cartItems - The contents of the cart
-   * @param {SkuPriceIndex} skuPrices - The unit costs as a map of prices to SKU
-   * @returns The total value of discounts based on the conditions and effects
-   * @private
-   */
-  private handleItemDiscount (ruleParams: PricingRule, cartItems: string[], skuPrices: SkuPriceIndex): number {
-    const { sku, price } = ruleParams
-    const fullPrice = skuPrices[sku]
-    const applicableItems = cartItems.filter(item => item === sku)
-    const numberTimesApplied = applicableItems.length
-    return numberTimesApplied * (fullPrice - price)
   }
 
   /**
