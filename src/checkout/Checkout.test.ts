@@ -1,6 +1,6 @@
 import Checkout from './Checkout'
 import pricingRules from '../data/pricingRules'
-import { SKU_CLASSIC, SKU_STANDOUT, SKU_PREMIUM } from '../data/inventory'
+import { SKU_CLASSIC, SKU_STANDOUT, SKU_PREMIUM } from './constants'
 
 // Integration tests for TDD
 describe('Integration Tests', () => {

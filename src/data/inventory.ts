@@ -1,7 +1,10 @@
-export const SKU_CLASSIC = 'classic'
-export const SKU_STANDOUT = 'standout'
-export const SKU_PREMIUM = 'premium'
-export const CURRENCY_AUD = 'AUD'
+import {
+  SKU_CLASSIC,
+  SKU_STANDOUT,
+  SKU_PREMIUM,
+  CURRENCY_AUD
+} from '../checkout/constants'
+
 const inventory = [
   {
     sku: SKU_CLASSIC,
