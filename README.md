@@ -30,7 +30,7 @@ Breaking down a high-level, itemised list of what I think needs to be done:
 
 - Checkout class with interfaces as described
 - Basic inventory service with static representation of advertisement types
-- Pricing rules engine that is extensible and supports two initial types of:
+- Pricing rules engine that is extensible and supports two initial types of discounts:
   - nth Item Free
   - Item Discount
 - Notation for pricing rules that maps the determines the available discounts and their parameters based on the customer
@@ -49,14 +49,14 @@ I would also like GitHub actions to trigger on each push to assert against the t
 
 I think I'm going to go with a Front-end approach it will be easier to demonstrate the flexibility of the cart logic and the tooling to scaffold out a running app is good. Obvious downside is the installed size.
 
-1. Get this readme committed
-2. Scaffold out a frontend Typescript / React app with Vite
-3. Write integration tests based on scenarios, adding JEST
-4. Establish the class and methods with types
-5. Add GHA workflow to run tests
-6. Main implementation
-7. Unit tests
-8. Doco and submission
+1. Get this readme committed ✅
+2. Scaffold out a frontend Typescript / React app with Vite ✅
+3. Write integration tests based on scenarios, adding JEST ✅
+4. Establish the class and methods with types ✅
+5. Add GHA workflow to run tests ✅
+6. Main implementation ✅
+7. Unit tests ✅
+8. Doco and submission 
 
 ### Pricing rules
 
@@ -91,4 +91,11 @@ An important distinction between the two types of rules is the layer at which th
 
 ## Implementation notes
 
-These will be populated as I go.
+- I kept the checkout state rather simple, especially in terms of the items, keeping them as a basic string array
+- I added a basic rounding implementation that is used during totaling to ensure max of two decimal places
+- Discount logic is stateless and easily built on. A few supporting unit tests here as this is the most crucial logic.
+- I think Typescript has added a bit of lag around running the tests but definitely avoided a few snafus along the way
+- Standard.js also caught a few gotchas and highlighted a few improvements.
+- You can probably tell I like reducers a lot. 😂
+- I would have loved to polish the UI more but it was more important to have just enough in place to demo.
+- If I had more time, I would have liked to have exposed discounted pricing to the UI for Ad Tiers based on pricing rules.

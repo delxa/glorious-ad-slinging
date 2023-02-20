@@ -81,6 +81,28 @@ export default class Checkout {
   }
 
   /**
+   * Returns the state of the cart
+   * @returns {CheckoutState} - The state object of the checkout
+   * @public
+   */
+  getState (): CheckoutState {
+    return { ...this.state }
+  }
+
+  /**
+   * Empties items from the cart and sets totals back to 0
+   * @public
+   */
+  empty (): void {
+    const state = this.state
+    this.setState({
+      ...state,
+      items: []
+    })
+    this.calculateTotals()
+  }
+
+  /**
    * PRIVATE MEMBERS
    */
 
@@ -101,9 +123,9 @@ export default class Checkout {
     const state = this.state
 
     // Derrive new totalState
-    const subtotal = this.calculateSubtotals()
-    const discountTotal = this.calculateDiscounts()
-    const total = subtotal - discountTotal
+    const subtotal = this.round(this.calculateSubtotals())
+    const discountTotal = this.round(this.calculateDiscounts())
+    const total = this.round(subtotal - discountTotal)
     const totals = {
       subtotal,
       discountTotal,
@@ -167,5 +189,12 @@ export default class Checkout {
     return inventory.reduce((a: any, c: InventoryItem) => {
       return { ...a, [c.sku]: c.price }
     }, {})
+  }
+
+  /**
+   * Rounds a number to eliminate superflous decimal points
+   */
+  private round (n: number): number {
+    return Math.round(n * 100) / 100
   }
 }
