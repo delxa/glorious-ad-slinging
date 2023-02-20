@@ -14,6 +14,7 @@ Clone this repo and install dependencies:
 
 ```bash
 git clone git@github.com:delxa/glorious-ad-slinging.git
+cd glorious-ad-slinging
 npm install
 ```
 
